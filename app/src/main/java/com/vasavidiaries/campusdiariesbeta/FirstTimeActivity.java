@@ -90,7 +90,7 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                     break;
                 }
                 case R.id.dContd_as_guest: {
-                    Thread splashscreen = new Thread(new Runnable() {
+                    /*Thread splashscreen = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -102,7 +102,10 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                             }
                         }
                     });
-                    splashscreen.start();
+                    splashscreen.start();*/
+
+                    Intent gotopost = new Intent(FirstTimeActivity.this, NewPostActivity.class);
+                    startActivity(gotopost);
                     break;
                 }
                 default: {

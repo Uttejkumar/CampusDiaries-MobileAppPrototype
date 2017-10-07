@@ -6,4 +6,169 @@
     android:layout_height="match_parent"
     tools:context="com.vasavidiaries.campusdiariesbeta.NewPostActivity">
 
+    <EditText
+        android:id="@+id/dPosttitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
+
+    <EditText
+        android:id="@+id/dPostdetailsshort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Post Short Description"
+        android:inputType="textMultiLine"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="19dp"
+        app:layout_constraintTop_toBottomOf="@+id/dPosttitle"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/dPostdetailslong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Post Long Description"
+        android:inputType="textMultiLine"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/dPostdetailsshort"
+        android:layout_marginTop="21dp"
+        app:layout_constraintTop_toBottomOf="@+id/dPostdetailsshort"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/dPostdetailsshort" />
+
+    <EditText
+        android:id="@+id/dContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Contact Number"
+        android:inputType="phone"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/dPostdetailslong"
+        android:layout_marginTop="23dp"
+        app:layout_constraintTop_toBottomOf="@+id/dPostdetailslong"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/dPostdetailslong" />
+
+    <EditText
+        android:id="@+id/dStartdate"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="Start Date"
+        android:inputType="date"
+        app:layout_constraintRight_toLeftOf="@+id/dEnddate"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="23dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dEnddate"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="23dp" />
+
+    <EditText
+        android:id="@+id/dEnddate"
+        android:layout_width="155dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="End Date"
+        android:inputType="date"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/dClubs"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="61dp"
+        app:layout_constraintTop_toTopOf="@+id/dContact"
+        android:layout_marginRight="16dp" />
+
+    <Spinner
+        android:id="@+id/dClubs"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/dUploadimage"
+        app:layout_constraintRight_toRightOf="@+id/dUploadimage"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/dUploadimage" />
+
+    <Button
+        android:id="@+id/dUploadimage"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:text="Upload Image"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/dPost"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/dPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dimgpreview"
+        android:visibility="gone"
+        app:layout_constraintRight_toLeftOf="parent"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dimgpreview"
+        android:hint="Enter pic name"
+        android:id="@+id/dimgname"
+        android:visibility="gone"
+        app:layout_constraintRight_toLeftOf="parent"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

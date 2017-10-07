@@ -3,6 +3,7 @@ from sqlalchemy import create_engine #Creating a engine to load database
 from sqlalchemy.orm import sessionmaker #Creating a session to access data
 from database_setup import Base, User, Posts, Clubs #Importing database
 from passlib.hash import sha256_crypt #password encryption
+import base64 #imageconversion
 
 app = Flask(__name__)
 
@@ -58,7 +59,35 @@ def registration(username, rollnumber, password, passwordre):
 @app.route('/retrieveposts')
 def retrieveposts():
     posts = dbsession.query(Posts).filter_by(modstatus = 1).all()
+    posts = reversed(posts)
     return jsonify(AllPosts=[i.serialize for i in posts])
+
+@app.route('/imageupload', methods = ['GET','POST'])
+def imageupload():
+    if request.method == 'GET':
+        return 'success'  
+    
+    if request.method == 'POST':
+        
+        name = request.args.getlist('imagename')
+        encodedimg = request.args.getlist('imagebits')
+
+        imgdata = base64.b64decode(encodedimg[0])
+        filename = str(name[0]) + '.png'
+        path = "D:\Workspaces\Campus Diaries\static\images\postpics" + '\\' + str(filename)
+
+        with open(path, 'wb') as f:
+            f.write(imgdata)
+            f.close()
+
+        
+
+        return path
+        
+        
+        
+            
+
 
 #initiating server
 if __name__ == '__main__':
