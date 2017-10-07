@@ -19,8 +19,14 @@
             <ImageView
                 android:id="@+id/posticon"
                 android:layout_width="170dp"
-                android:layout_height="146dp"
-                app:srcCompat="@drawable/temporaryimage" />
+                android:layout_height="146dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
         </FrameLayout>
 
         <LinearLayout

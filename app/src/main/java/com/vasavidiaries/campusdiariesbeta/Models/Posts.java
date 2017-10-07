@@ -65,7 +65,7 @@ public class Posts {
     }
 
     public void setPostpic(String postpic) {
-        this.postpic = postpic;
+        this.postpic = "http://10.0.2.2:8080/static/images/postpics/" + postpic;
     }
 
     public int getContact() {

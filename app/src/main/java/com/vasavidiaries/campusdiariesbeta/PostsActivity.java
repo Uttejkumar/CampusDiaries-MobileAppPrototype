@@ -2,6 +2,7 @@ package com.vasavidiaries.campusdiariesbeta;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -18,12 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vasavidiaries.campusdiariesbeta.JSONParser;
 import com.vasavidiaries.campusdiariesbeta.Models.Posts;
 
@@ -47,6 +55,17 @@ public class PostsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posts);
         Log.d("PLACE","IN POSTS ACTIVITY");
+
+        // Create default options which will be used for every
+        //  displayImage(...) call if no options will be passed to this method
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                                             .cacheInMemory(true)
+                                             .cacheOnDisk(true)
+                                             .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                                         .defaultDisplayImageOptions(defaultOptions)
+                                         .build();
+        ImageLoader.getInstance().init(config);
 
         lvPosts = (ListView)findViewById(R.id.lvPosts);
 
@@ -139,10 +158,10 @@ public class PostsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -153,7 +172,7 @@ public class PostsActivity extends AppCompatActivity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+         return super.onOptionsItemSelected(item);
     }
 
     public class PostsAdapter extends ArrayAdapter{
@@ -173,45 +192,78 @@ public class PostsActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
 
+            ViewHolder holder = null;
+
             Log.d("PostsAdapter","inside get view");
 
             if (convertView == null){
+                holder = new ViewHolder();
                 convertView = inflater.inflate(resource, null);
-            }
+                holder.ivPost = (ImageView)convertView.findViewById(R.id.posticon);
+                holder.title = (TextView)convertView.findViewById(R.id.title);
+                holder.postedby = (TextView)convertView.findViewById(R.id.postedby);
+                holder.Club = (TextView)convertView.findViewById(R.id.Club);
+                holder.startdate = (TextView)convertView.findViewById(R.id.startdate);
+                holder.enddate = (TextView)convertView.findViewById(R.id.enddate);
+                holder.contact = (TextView)convertView.findViewById(R.id.contact);
+                holder.Description = (TextView)convertView.findViewById(R.id.Description);
 
-            //ImageView ivPost;
-            TextView title;
-            TextView postedby;
-            TextView Club;
-            TextView startdate;
-            TextView enddate;
-            TextView contact;
-            TextView Description;
+                convertView.setTag(holder);
+            }else
+            {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
             Log.d("POstsAdapter","Assigning views");
 
-            //ivPost = (ImageView)convertView.findViewById(R.id.posticon);
-            title = (TextView)convertView.findViewById(R.id.title);
-            postedby = (TextView)convertView.findViewById(R.id.postedby);
-            Club = (TextView)convertView.findViewById(R.id.Club);
-            startdate = (TextView)convertView.findViewById(R.id.startdate);
-            enddate = (TextView)convertView.findViewById(R.id.enddate);
-            contact = (TextView)convertView.findViewById(R.id.contact);
-            Description = (TextView)convertView.findViewById(R.id.Description);
+            final ProgressBar progressBar = (ProgressBar)convertView.findViewById(R.id.progressBar);
+
+            ImageLoader.getInstance().displayImage(postsList.get(position).getPostpic(), holder.ivPost, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view){
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
 
             Log.d("PostsAdapter","Setting values to views");
 
-            title.setText(postsList.get(position).getTitle());
-            postedby.setText("Posted By: " + String.valueOf(postsList.get(position).getPostedby()));
-            Club.setText("Club: " + postsList.get(position).getClub());
-            startdate.setText("Start Date: " + postsList.get(position).getStartdate());
-            enddate.setText("End date: " + postsList.get(position).getEnddate());
-            contact.setText("Contact" + String.valueOf(postsList.get(position).getContact()));
-            Description.setText(postsList.get(position).getShortdesc());
+            holder.title.setText(postsList.get(position).getTitle());
+            holder.postedby.setText("Posted By: " + String.valueOf(postsList.get(position).getPostedby()));
+            holder.Club.setText("Club: " + postsList.get(position).getClub());
+            holder.startdate.setText("Start Date: " + postsList.get(position).getStartdate());
+            holder.enddate.setText("End date: " + postsList.get(position).getEnddate());
+            holder.contact.setText("Contact" + String.valueOf(postsList.get(position).getContact()));
+            holder.Description.setText(postsList.get(position).getShortdesc());
 
             Log.d("POstsAdapter","Returning convertview");
 
             return convertView;
+        }
+
+        class ViewHolder{
+            private ImageView ivPost;
+            private TextView title;
+            private TextView postedby;
+            private TextView Club;
+            private TextView startdate;
+            private TextView enddate;
+            private TextView contact;
+            private TextView Description;
         }
     }
 }
