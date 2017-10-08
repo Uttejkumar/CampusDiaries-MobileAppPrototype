@@ -2,10 +2,17 @@ package com.vasavidiaries.campusdiariesbeta;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.MenuItemHoverListener;
@@ -21,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,17 +52,27 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vasavidiaries.campusdiariesbeta.JSONParser;
 import com.vasavidiaries.campusdiariesbeta.Models.Posts;
 
-public class PostsActivity extends AppCompatActivity {
+public class PostsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
     StringBuffer buffer = new StringBuffer();
     ListView lvPosts;
+    DrawerLayout mDrawerlayout;
+    ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posts);
         Log.d("PLACE","IN POSTS ACTIVITY");
+
+        mDrawerlayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
+        mDrawerlayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setNavigationViewListner();
 
         // Create default options which will be used for every
         //  displayImage(...) call if no options will be passed to this method
@@ -71,6 +89,63 @@ public class PostsActivity extends AppCompatActivity {
 
         new GetPosts().execute("Execute");
     }
+
+    private void setNavigationViewListner() {
+        Log.d("NavLayout","in");
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        Log.d("NavLayout","out");
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item)
+    {
+        Log.d("NavItems","in");
+        switch(item.getItemId())
+        {
+
+            case R.id.dNewpost:{
+                SharedPreferences prefs = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+                if(prefs.getString("username","").equals(""))
+                    Toast.makeText(getApplicationContext(),"Log in to post.",Toast.LENGTH_SHORT);
+                else{
+                    Intent gotonewpost = new Intent(this, NewPostActivity.class);
+                    startActivity(gotonewpost);
+                }
+                break;
+            }
+            case R.id.dSettings:{
+                Toast.makeText(getApplicationContext(), "This feature will be implemented soon", Toast.LENGTH_SHORT).show();
+                break;
+            }
+
+            case R.id.dFeedback:{
+                Toast.makeText(getApplicationContext(), "This feature will be implemented soon", Toast.LENGTH_SHORT).show();
+                break;
+            }
+
+            case R.id.dLogout:{
+                SharedPreferences removeinfo = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor= removeinfo.edit();
+
+                editor.putString("username","");
+                editor.putString("password","");
+                editor.apply();
+
+                Toast.makeText(getApplicationContext(), "You are now logged out", Toast.LENGTH_SHORT).show();
+
+                Intent backtofront = new Intent(PostsActivity.this, FirstTimeActivity.class);
+                startActivity(backtofront);
+                finish();
+                break;
+            }
+        }
+
+        mDrawerlayout.closeDrawer(GravityCompat.START);
+        Log.d("NavItems","out");
+        return true;
+    }
+
 
     public class GetPosts extends AsyncTask<String, Void, List<Posts>>{
 
@@ -171,6 +246,9 @@ public class PostsActivity extends AppCompatActivity {
             new GetPosts().execute("Execute");
             return true;
         }
+
+        if(mToggle.onOptionsItemSelected(item))
+            return true;
 
          return super.onOptionsItemSelected(item);
     }

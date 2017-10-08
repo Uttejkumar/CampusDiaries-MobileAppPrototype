@@ -1,6 +1,8 @@
 package com.vasavidiaries.campusdiariesbeta;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +37,18 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
     {
         //TODO:Check if the user logged in previosuly and take him to that account
 
+        SharedPreferences sharedPreferences = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString("username","");
+        String password = sharedPreferences.getString("password","");
+
+        if(username.equals("") || password.equals("")) {}
+        else {
+            if (username.length() == 12) {
+                LoginCredentials(username, password);
+                return;
+            }
+        }
+
         mapGUI();
         Toast.makeText(getApplicationContext(),"Mapping GUI", Toast.LENGTH_LONG);
     }
@@ -59,15 +73,14 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
         try {
             switch (view.getId()) {
                 case R.id.dLogin: {
-                    Toast.makeText(getApplicationContext(), "Login Button Clicked", Toast.LENGTH_LONG);
                     String rollnumber = mRoll_number.getText().toString();
                     String password = mPassword.getText().toString();
 
                     if (rollnumber != null && password != null) {
                         if (rollnumber.length() != 12) {
-                            Toast.makeText(getApplicationContext(), "Invalid Login Credentials", Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(), "Invalid Login Credentials", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT).show();
                             LoginCredentials(rollnumber, password);
                         }
                     }
@@ -90,7 +103,7 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                     break;
                 }
                 case R.id.dContd_as_guest: {
-                    /*Thread splashscreen = new Thread(new Runnable() {
+                    Thread splashscreen = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -102,10 +115,7 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                             }
                         }
                     });
-                    splashscreen.start();*/
-
-                    Intent gotopost = new Intent(FirstTimeActivity.this, NewPostActivity.class);
-                    startActivity(gotopost);
+                    splashscreen.start();
                     break;
                 }
                 default: {
@@ -143,7 +153,24 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
             if (searchResults != null && !searchResults.equals("")) {
                 if (searchResults.equals("True")) {
                     Toast.makeText(getApplicationContext(), "Login Successful",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+
+                    try {
+                        if (sharedPreferences.getString("username", "").equals(mRoll_number.getText().toString())) {
+
+                        } else {
+                            Log.d("Position", "Debugging");
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("username", mRoll_number.getText().toString());
+                            editor.putString("password", mPassword.getText().toString());
+                            editor.apply();
+                        }
+                    }catch(Exception e){
+                        Log.e("CampusDiaries","Exception",e);
+                    }
+
                     Thread splashscreen = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -157,6 +184,7 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                         }
                     });
                     splashscreen.start();
+                    finish();
 
                 }
                 else{

@@ -71,6 +71,8 @@ def imageupload():
         
         name = request.args.getlist('imagename')
         encodedimg = request.args.getlist('imagebits')
+        postedby = request.args.getlist('postinguser')
+        posttitle = request.args.getlist('title')
 
         imgdata = base64.b64decode(encodedimg[0])
         filename = str(name[0]) + '.png'
@@ -80,9 +82,45 @@ def imageupload():
             f.write(imgdata)
             f.close()
 
-        
+        thispost = dbsession.query(Posts).filter_by(postedby = str(postedby[0]),title = str(posttitle[0])).first()
+        thispost.postpic = filename
+        dbsession.commit()
+    
+        return 'success'
+    return 'fail'
 
-        return path
+@app.route('/newpost', methods = ['GET','POST'])
+def newpost():
+    if request.method == 'GET':
+        return 'Failed'
+
+    if request.method == 'POST':
+
+        postinguser = request.args.getlist('postinguser')
+        title = request.args.getlist('title')
+        shortdesc = request.args.getlist('shortdesc')
+        longdesc = request.args.getlist('longdesc')
+        contact = request.args.getlist('contact')
+        startdate = request.args.getlist('startdate')
+        enddate = request.args.getlist('enddate')
+        
+        newpost = Posts(
+                postedby = postinguser[0],
+                club     = "",
+                title    = title[0],
+                shortdesc= shortdesc[0],
+                longdesc = longdesc[0],
+                startdate= startdate[0],
+                enddate  = enddate[0],
+                postpic  = "",
+                contact  = contact[0]
+            )
+
+        dbsession.add(newpost)
+        dbsession.commit()
+
+        return 'Successful upload'
+    return 'Failed'
         
         
         
