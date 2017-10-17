@@ -32,3 +32,9 @@ A common chat for the whole college with options to branch the chat.
 Version 4:
 A anonymous-enough suggestion box.
  
+Version 5:
+User should be able to register for the event.
+
+Version 6:
+A financial api integration so that payments for the events can be done online.
+
