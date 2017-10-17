@@ -7,93 +7,246 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <LinearLayout
+    <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:orientation="horizontal">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="144dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_weight="0.96"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:orientation="vertical">&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/Club"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="15426dp"-->
+        <!--android:text="TextView" />-->
+
+    <!--<TextView-->
+            <!--android:id="@+id/enddate"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:text="TextView" />-->
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/posticon"-->
+            <!--android:layout_width="237dp"-->
+            <!--android:layout_height="244dp"-->
+            <!--android:src="@drawable/no_image_available" />-->
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--style="?android:attr/progressBarStyle"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="58dp"-->
+            <!--android:layout_gravity="center" />-->
+    <!--</FrameLayout>-->
+
+    <!--<TextView-->
+            <!--android:id="@+id/startdate"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="70.25"-->
+            <!--android:text="TextView" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/contact"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="93.42"-->
+            <!--android:text="TextView" />-->
+
+        <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_weight="0.04"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:weightSum="1">&ndash;&gt;-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/Description"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2.89"-->
+            <!--android:text="TextView" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/postedby"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2.89"-->
+            <!--android:text="TextView" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/title"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2.89"-->
+            <!--android:text="TextView"-->
+            <!--android:textStyle="bold" />-->
+    <!--</LinearLayout>-->
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/posticon"
-                android:layout_width="170dp"
-                android:layout_height="146dp" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center" />
-        </FrameLayout>
-
-        <LinearLayout
+        <ImageView
+            android:id="@+id/posticon"
             android:layout_width="match_parent"
-            android:layout_height="144dp"
-            android:orientation="vertical"
-            android:layout_weight="0.96">
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="197dp"
+            app:srcCompat="@drawable/no_image_available" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.04"
-                android:text="TextView"
-                android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="80dp"
+            android:layout_height="58dp"
+            android:layout_gravity="center" />
 
-            <TextView
-                android:id="@+id/postedby"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.05"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/Club"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.01"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/startdate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.01"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/enddate"
-                android:layout_width="201dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.01"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/contact"
-                android:layout_width="198dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.01"
-                android:text="TextView" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.04"
-        android:orientation="vertical"
-        android:weightSum="1">
+    </FrameLayout>
 
         <TextView
-            android:id="@+id/Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.89"
-            android:text="TextView" />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:id="@+id/title"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="The title goes here"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="bottom" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="5dp">
+
+        <ImageView
+            android:id="@+id/locationimage"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_room_black_24px" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/locationimage"
+            android:gravity="center"
+            android:text="Vasavi College"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/clubimage"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/location"
+            android:src="@drawable/ic_class_black_24px" />
+
+        <TextView
+            android:id="@+id/Club"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/clubimage"
+            android:gravity="center"
+            android:text="The event belongs to this club"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="5dp">
+
+        <ImageView
+            android:id="@+id/dateimage"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_today_black_24px"
+            android:layout_marginLeft="6dp"/>
+
+        <TextView
+            android:id="@+id/startdate"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="11-11-1111"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/dateimage"
+            android:gravity="center"
+            android:layout_marginTop="1dp"
+            />
+
+        <ImageView
+            android:id="@+id/timeimage"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_query_builder_black_24px"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/startdate"
+            />
+
+        <TextView
+            android:id="@+id/starttime"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="05.30"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/timeimage"
+            android:gravity="center"
+            android:layout_marginTop="1dp"
+            />
+
+        <ImageView
+            android:id="@+id/contactimage"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_perm_phone_msg_black_24px"
+            android:layout_toRightOf="@id/starttime"
+            />
+
+        <TextView
+            android:id="@+id/contact"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="9908095560"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/contactimage"
+            android:gravity="center"
+            android:layout_marginTop="4dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Description"
+        android:textSize="15sp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5sp"
+        android:text="This is where the short description is. This is where the short description is.
+                        This is where the short description is.This is where the short description is.This is where the short description is."/>
 </LinearLayout>

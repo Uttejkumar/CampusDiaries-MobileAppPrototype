@@ -3,6 +3,7 @@ package com.vasavidiaries.campusdiariesbeta.Models;
 import java.util.List;
 
 public class Posts {
+    private int postid;
     private int postedby;
     private String club;
     private String title;
@@ -65,8 +66,12 @@ public class Posts {
     }
 
     public void setPostpic(String postpic) {
-        this.postpic = "http://10.0.2.2:8080/static/images/postpics/" + postpic;
+        this.postpic = "http://campusdiaries.pythonanywhere.com/uploads/" + postpic;
     }
+
+    public void setPostid(int postid){ this.postid = postid;}
+
+    public int getPostid(){ return postid;}
 
     public int getContact() {
         return contact;

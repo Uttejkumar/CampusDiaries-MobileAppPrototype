@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     final static String SERVER_BASE_URL =
-            "http://10.0.2.2:8080/";
+            "http://campusdiaries.pythonanywhere.com/";
 
     public static URL buildUrl(String rollno_query, String pwd_query) {
 
@@ -59,6 +59,7 @@ public class NetworkUtils {
         Log.d("LoginURL","Inside Call");
         urlConnection.setUseCaches(false);
         urlConnection.setDoOutput(true);
+        //urlConnection.setRequestMethod("");
         //urlConnection.setConnectTimeout(15001);
         //urlConnection.setReadTimeout(15001);
 

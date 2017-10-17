@@ -25,12 +25,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.vasavidiaries.campusdiariesbeta.Communications.ImageUpload;
 import com.vasavidiaries.campusdiariesbeta.Communications.NetworkUtils;
+import com.vasavidiaries.campusdiariesbeta.Models.Posts;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -54,9 +64,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
     String commonTitle = null;
 
     final static String SERVER_BASE_URL =
-            "http://10.0.2.2:8080/";
-
-//    private String uploadurl = "http://10.0.2.2:8080/imageupload";
+            "http://campusdiaries.pythonanywhere.com/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +103,18 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
             case R.id.dPost:{
+
+                if(mPosttitle.equals("") || mPostdetailsshort.equals("")
+                        || mContact.equals("") || mStartdate.equals(""))
+                    Toast.makeText(getApplicationContext(), "Invalid post details. Check and try again.", Toast.LENGTH_SHORT).show();
+
+
                 uploadContent();
                 uploadImage();
+                Toast.makeText(getApplicationContext(),"Your post has been sent for moderation.",Toast.LENGTH_SHORT);
+                Intent returntoposts = new Intent(NewPostActivity.this, PostsActivity.class);
+                startActivity(returntoposts);
+                finish();
                 break;
             }
         }
@@ -146,22 +164,32 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
         Log.d("Newpostactivity","Left onactivityresult()");
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
 
-        Log.d("Newpostactivity","Entered uploadImage()");
+        Log.d("Newpostactivity", "Entered uploadImage()");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, build_url(),
+        if (mImgname.getText().toString().equals("")) {
+            Toast.makeText(getApplicationContext(), "Please provide a relevant filename", Toast.LENGTH_SHORT);
+            return;
+        }
+
+        new uploadingImage().execute();
+
+    }
+
+        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, build_url(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                         mImgpreview.setImageResource(0);
                         mImgpreview.setVisibility(View.GONE);
                         mImgname.setText("");
                         mImgname.setVisibility(View.GONE);
 
                         if (response.equals("success")){
+                            Toast.makeText(getApplicationContext(), "Upload successful.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Your post has been sent for moderation. It should be posted in a short while.", Toast.LENGTH_SHORT);
                             Intent gobacktoposts = new Intent(NewPostActivity.this, PostsActivity.class);
                             startActivity(gobacktoposts);
                             finish();
@@ -170,15 +198,18 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error.\nYour post may have been partially uploaded.",Toast.LENGTH_SHORT).show();
+                Intent returnintent = new Intent(NewPostActivity.this, PostsActivity.class);
+                startActivity(returnintent);
+                finish();
             }
         });
-        ImageUpload.getmInstance(NewPostActivity.this).addToRequestQueue(stringRequest);
+        ImageUpload.getmInstance(NewPostActivity.this).addToRequestQueue(stringRequest);*/
 
-        Log.d("Newpostactivity","Left uploadImage()");
-    }
+        //Log.d("Newpostactivity","Left uploadImage()");
+    //}
 
-    public String build_url(){
+    /*public String build_url(){
 
         Log.d("Newpostactivity","in buildurl()");
 
@@ -196,6 +227,27 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
         Log.d("Newpostactivity","out buildurl()");
         return builtUri.toString();
 
+    }*/
+
+    public String getImageJSONString(){
+
+        Log.d("NewPostActivity", "Inside getJSONString");
+
+        SharedPreferences extractuser = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+        String postinguser = extractuser.getString("username","");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("imagebits", imageToString(bitmap));
+            jsonObject.put("imagename", mImgname.getText().toString().trim());
+            jsonObject.put("postinguser",postinguser);
+            jsonObject.put("title", commonTitle);
+        }catch(Exception e)
+        {
+            Log.e("error","imagejsonobject",e);
+        }
+
+        return jsonObject.toString();
     }
 
     private String imageToString(Bitmap bitmap){
@@ -225,7 +277,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
         String postinguser = extractuser.getString("username","");
 
         Uri uploadposturi = Uri.parse(SERVER_BASE_URL).buildUpon()
-                .appendPath("newpost")
+                .appendPath("newpostandroid")
                 .appendQueryParameter("postinguser", postinguser)
                 .appendQueryParameter("title", commonTitle)
                 .appendQueryParameter("shortdesc", shortdesc)
@@ -265,7 +317,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
             Log.d("NewPostActivity","Reached onpostexecute of contentupload");
             if(postresults != null && !postresults.equals("")){
                 if(postresults.equals("Successful upload")){
-                    Toast.makeText(getApplicationContext(),"New post uploading...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Content uploaded\nUploading Image...", Toast.LENGTH_SHORT).show();
                 }
                 else if(postresults.equals("Failed")){
                     Toast.makeText(getApplicationContext(),"There seems to be an error in the post data. Try again.", Toast.LENGTH_SHORT).show();
@@ -275,6 +327,52 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
                     }
             }
             Log.d("NewPostActivity","Reached onpostexecute of contentupload");
+        }
+    }
+
+    private class uploadingImage extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params){
+
+            try{
+                Log.d("Uploading image","Image uploading");
+                String jsondata = getImageJSONString();
+                String gotourl = "http://campusdiaries.pythonanywhere.com/imageupload";
+                URL url = new URL(gotourl);
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setFixedLengthStreamingMode(jsondata.getBytes().length);
+                connection.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+                OutputStream out = new BufferedOutputStream(connection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(jsondata);
+                Log.d("Outgoing", "Data to flask = " + jsondata);
+                writer.flush();
+                writer.close();
+                out.close();
+                Log.d("Connection","tobeconnected");
+                connection.connect();
+                Log.d("Response Code newpost", Integer.toString(connection.getResponseCode()));
+                InputStream in = new BufferedInputStream(connection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        in, "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                in.close();
+                String result = sb.toString();
+                Log.d("Incoming", "Response from flask = " + result);
+                //Response = new JSONObject(result);
+                connection.disconnect();
+
+            }catch(Exception e){
+                Log.e("UploadingImage","Error",e);
+            }
+            return null;
         }
     }
 }

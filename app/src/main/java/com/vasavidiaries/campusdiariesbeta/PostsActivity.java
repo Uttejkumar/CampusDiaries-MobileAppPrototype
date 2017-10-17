@@ -1,21 +1,17 @@
 package com.vasavidiaries.campusdiariesbeta;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.MenuItemHoverListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -33,11 +28,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,7 +41,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vasavidiaries.campusdiariesbeta.JSONParser;
 import com.vasavidiaries.campusdiariesbeta.Models.Posts;
 
 public class PostsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -107,13 +98,29 @@ public class PostsActivity extends AppCompatActivity implements NavigationView.O
             case R.id.dNewpost:{
                 SharedPreferences prefs = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
                 if(prefs.getString("username","").equals(""))
-                    Toast.makeText(getApplicationContext(),"Log in to post.",Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(),"Log in to post.",Toast.LENGTH_SHORT).show();
                 else{
                     Intent gotonewpost = new Intent(this, NewPostActivity.class);
                     startActivity(gotonewpost);
                 }
                 break;
             }
+
+            case R.id.dModerate:{
+
+                SharedPreferences prefs = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
+
+                if(prefs.getString("ismoderator","").equals("true")) {
+                    Toast.makeText(getApplicationContext(),"Moderator status confirmed",Toast.LENGTH_SHORT).show();
+                    Intent gotomoderate = new Intent(this, ModeratePosts.class);
+                    startActivity(gotomoderate);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"You need to be a moderator to access this function", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+
             case R.id.dSettings:{
                 Toast.makeText(getApplicationContext(), "This feature will be implemented soon", Toast.LENGTH_SHORT).show();
                 break;
@@ -126,18 +133,26 @@ public class PostsActivity extends AppCompatActivity implements NavigationView.O
 
             case R.id.dLogout:{
                 SharedPreferences removeinfo = getSharedPreferences("logininfo", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor= removeinfo.edit();
 
-                editor.putString("username","");
-                editor.putString("password","");
-                editor.apply();
+                if(removeinfo.getString("username","").equals("")) {
+                    Toast.makeText(getApplicationContext(), "You are not logged in", Toast.LENGTH_SHORT).show();
+                    break;
+                }
 
-                Toast.makeText(getApplicationContext(), "You are now logged out", Toast.LENGTH_SHORT).show();
+                else {
+                    SharedPreferences.Editor editor = removeinfo.edit();
 
-                Intent backtofront = new Intent(PostsActivity.this, FirstTimeActivity.class);
-                startActivity(backtofront);
-                finish();
-                break;
+                    editor.putString("username", "");
+                    editor.putString("password", "");
+                    editor.apply();
+
+                    Toast.makeText(getApplicationContext(), "You are now logged out", Toast.LENGTH_SHORT).show();
+
+                    Intent backtofront = new Intent(PostsActivity.this, FirstTimeActivity.class);
+                    startActivity(backtofront);
+                    finish();
+                    break;
+                }
             }
         }
 
@@ -146,14 +161,13 @@ public class PostsActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-
     public class GetPosts extends AsyncTask<String, Void, List<Posts>>{
 
         @Override
         protected List<Posts> doInBackground(String... params) {
             URL url = null;
             try {
-                url = new URL("http://10.0.2.2:8080/retrieveposts");
+                url = new URL("http://campusdiaries.pythonanywhere.com/retrieveposts");
             } catch (Exception e) {
                 Log.e("EXception", "URLS", e);
             }
@@ -279,10 +293,10 @@ public class PostsActivity extends AppCompatActivity implements NavigationView.O
                 convertView = inflater.inflate(resource, null);
                 holder.ivPost = (ImageView)convertView.findViewById(R.id.posticon);
                 holder.title = (TextView)convertView.findViewById(R.id.title);
-                holder.postedby = (TextView)convertView.findViewById(R.id.postedby);
+                //holder.postedby = (TextView)convertView.findViewById(R.id.postedby);
                 holder.Club = (TextView)convertView.findViewById(R.id.Club);
                 holder.startdate = (TextView)convertView.findViewById(R.id.startdate);
-                holder.enddate = (TextView)convertView.findViewById(R.id.enddate);
+                //holder.enddate = (TextView)convertView.findViewById(R.id.enddate);
                 holder.contact = (TextView)convertView.findViewById(R.id.contact);
                 holder.Description = (TextView)convertView.findViewById(R.id.Description);
 
@@ -321,11 +335,11 @@ public class PostsActivity extends AppCompatActivity implements NavigationView.O
             Log.d("PostsAdapter","Setting values to views");
 
             holder.title.setText(postsList.get(position).getTitle());
-            holder.postedby.setText("Posted By: " + String.valueOf(postsList.get(position).getPostedby()));
-            holder.Club.setText("Club: " + postsList.get(position).getClub());
-            holder.startdate.setText("Start Date: " + postsList.get(position).getStartdate());
-            holder.enddate.setText("End date: " + postsList.get(position).getEnddate());
-            holder.contact.setText("Contact" + String.valueOf(postsList.get(position).getContact()));
+            //holder.postedby.setText("Posted By: " + String.valueOf(postsList.get(position).getPostedby()));
+            holder.Club.setText(postsList.get(position).getClub());
+            holder.startdate.setText(postsList.get(position).getStartdate());
+            //holder.enddate.setText("End date: " + postsList.get(position).getEnddate());
+            holder.contact.setText(String.valueOf(postsList.get(position).getContact()));
             holder.Description.setText(postsList.get(position).getShortdesc());
 
             Log.d("POstsAdapter","Returning convertview");

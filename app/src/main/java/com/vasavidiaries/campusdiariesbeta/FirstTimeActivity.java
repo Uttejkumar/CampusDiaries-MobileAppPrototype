@@ -62,6 +62,12 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
         mRoll_number      = (EditText) findViewById(R.id.drollno);
         mPassword         = (EditText) findViewById(R.id.dPassword);
 
+//        mLogin_activity.setVisibility(View.VISIBLE);
+//        mNewuser_activity.setVisibility(View.VISIBLE);
+//        mGuest_activity.setVisibility(View.VISIBLE);
+//        mRoll_number.setVisibility(View.VISIBLE);
+//        mPassword.setVisibility(View.VISIBLE);
+        
         mLogin_activity.setOnClickListener(this);
         mNewuser_activity.setOnClickListener(this);
         mGuest_activity.setOnClickListener(this);
@@ -151,7 +157,7 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onPostExecute(String searchResults) {
             if (searchResults != null && !searchResults.equals("")) {
-                if (searchResults.equals("True")) {
+                if (searchResults.equals("True") || searchResults.equals("MTrue")) {
                     Toast.makeText(getApplicationContext(), "Login Successful",
                             Toast.LENGTH_SHORT).show();
 
@@ -165,6 +171,10 @@ public class FirstTimeActivity extends AppCompatActivity implements View.OnClick
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("username", mRoll_number.getText().toString());
                             editor.putString("password", mPassword.getText().toString());
+                            if(searchResults.equals("MTrue"))
+                                editor.putString("ismoderator", "true");
+                            else
+                                editor.putString("ismododerator", "false");
                             editor.apply();
                         }
                     }catch(Exception e){
