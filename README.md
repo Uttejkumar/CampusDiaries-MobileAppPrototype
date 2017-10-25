@@ -38,3 +38,5 @@ User should be able to register for the event.
 Version 6:
 A financial api integration so that payments for the events can be done online.
 
+NOTE: Further developments in this app are halted. The same project will re-begin with a more better and efficient code and libraries usage soon.
+
